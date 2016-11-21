@@ -1,0 +1,226 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/schemas/live_concert#> .
+
+
+#===== Defnitions ================
+
+#===== Classes ========
+
+:LiveConcert a rdfs:Class .
+:Artist a rdfs:Class .
+:Song a rdfs:Class .
+:Repertoire a rdfs:Class .
+
+#:Date a rdfs:Class .
+:Location a rdfs:Class .
+
+:Genre a rdfs:Class .
+:Rock rdfs:subClassOf :Genre .
+:Pop rdfs:subClassOf :Genre .
+:Metal rdfs:subClassOf :Genre .
+:Doom rdfs:subClassOf :Genre .
+:Heavy_Metal rdfs:subClassOf :Metal .
+
+#======================
+
+#===== Properties =====
+
+:concertArtist a rdf:Property ;
+	rdfs:domain :LiveConcert ;
+	rdfs:range :Artist .
+
+:concertDate a rdf:Property ;
+	rdfs:domain :LiveConcert ;
+	rdfs:range xsd:date .
+
+#:date a rdf:Property ;
+#	rdfs:domain :Date ;
+#	rdfs:range xsd:date .
+
+:concertLocation a rdf:Property ;
+	rdfs:domain :LiveConcert ;
+	rdfs:range :Location .
+
+:location a rdfs:Property ;
+	rdfs:domain :Location ;
+	rdfs:range rdfs:Literal .
+
+:artistName a rdf:Property ;
+	rdfs:domain :Artist ;
+    rdfs:range rdfs:Literal .
+
+:artistGenre a rdf:Property ;
+	rdfs:domain :Artist ;
+	rdfs:range :Genre .
+
+:artistRepertoire a rdf:Property ;
+	rdfs:domain :Artist ;
+	rdfs:range :Repertoire .
+
+:repertoireSongs a rdf:Property ;
+	rdfs:domain :Repertoire ;
+	rdfs:range :Song .
+
+:songName a rdf:Property ;
+	rdfs:domain :Song ;
+	rdfs:range rdfs:Literal .
+
+#======================
+
+#=================================
+
+#===== Instances =================
+
+#===== LiveConcerts ===
+
+:MotorpsychoConcert1 a :LiveConcert ;
+	:concertArtist :Motorpsycho ;
+	:concertDate "2016-08-01"^^xsd:date ;
+	:concertLocation :Storsalen .
+
+:MotorheadConcert1 a :LiveConcert ;
+	:concertArtist :Motorhead ;
+	:concertDate "2016-08-02"^^xsd:date ;
+	:concertLocation :Storsalen .
+
+:SlayerConcert1 a :LiveConcert ;
+	:concertArtist :Slayer ;
+	:concertDate "2016-08-03"^^xsd:date ;
+	:concertLocation :Storsalen .
+
+:MastodonConcert1 a :LiveConcert ;
+	:concertArtist :Mastodon ;
+	:concertDate "2016-08-04"^^xsd:date ;
+	:concertLocation :Storsalen .
+
+:TheSwordConcert1 a :LiveConcert ;
+	:concertArtist :TheSword ;
+	:concertDate "2016-08-05"^^xsd:date ;
+	:concertLocation :Storsalen .
+
+:MotorpsychoConcert2 a :LiveConcert ;
+	:concertArtist :Motorpsycho ;
+	:concertDate "2016-08-02"^^xsd:date ;
+	:concertLocation :Knaus .
+
+:MotorheadConcert2 a :LiveConcert ;
+	:concertArtist :Motorhead ;
+	:concertDate "2016-08-03"^^xsd:date ;
+	:concertLocation :Knaus .
+
+:SlayerConcert2 a :LiveConcert ;
+	:concertArtist :Slayer ;
+	:concertDate "2016-08-04"^^xsd:date ;
+	:concertLocation :Knaus .
+
+:MastodonConcert2 a :LiveConcert ;
+	:concertArtist :Mastodon ;
+	:concertDate "2016-08-05"^^xsd:date ;
+	:concertLocation :Knaus .
+
+:TheSwordConcert2 a :LiveConcert ;
+	:concertArtist :TheSword ;
+	:concertDate "2016-08-06"^^xsd:date ;
+	:concertLocation :Knaus .
+
+#======================
+
+#===== Artists ========
+
+:Motorpsycho a :Artist ;
+	:artistName "Motorpsycho" ;
+	:artistGenre :Rock ;
+	:artistRepertoire :rep1, :rep2 .
+
+:Motorhead a :Artist ;
+	:artistName "Motorhead" ;
+	:artistGenre :Metal ;
+	:artistRepertoire :rep2, :rep3 .
+
+:Slayer a :Artist ;
+	:artistName "Slayer" ;
+	:artistGenre :Metal ;
+	:artistRepertoire :rep3, :rep4 .
+
+:Mastodon a :Artist ;
+	:artistName "Mastodon" ;
+	:artistGenre :Heavy_Metal ;
+	:artistRepertoire :rep4, :rep5 .
+
+:TheSword a :Artist ;
+	:artistName "The Sword" ;
+	:artistGenre :Doom ;
+	:artistRepertoire :rep5, :rep1, :rep6 .
+
+#======================
+
+#===== Songs ==========
+
+:hello a :Song ;
+	:songName "Hello" .
+
+:bye a :Song ;
+	:songName "Good bye?" .
+
+:how_are_you a :Song ;
+	:songName "How are you?" .
+
+:fine_thank_you a :Song ;
+	:songName "Fine, thank you!" .
+
+:later_dude a :Song ;
+	:songName "Later, dude!" .
+
+:hello_again a :Song ;
+	:songName "Hello Again!" .
+
+:balls a :Song ;
+	:songName "Balls!" .
+
+#======================
+
+#===== Repertoires ====
+
+:rep1 a :Repertoire ;
+	:repertoireSongs :hello, :bye, :fine_thank_you .
+
+:rep2 a :Repertoire ;
+	:repertoireSongs :how_are_you, :fine_thank_you .
+
+:rep3 a :Repertoire ;
+	:repertoireSongs :later_dude, :hello_again .
+
+:rep4 a :Repertoire ;
+	:repertoireSongs :bye, :fine_thank_you .
+
+:rep5 a :Repertoire ;
+	:repertoireSongs :how_are_you, :hello .
+
+:rep6 a :Repertoire ;
+	:repertoireSongs :balls .
+
+#======================
+
+#===== Locations ======
+
+:Storsalen a :Location ;
+	:location "Storsalen" .
+
+:Knaus a :Location ;
+	:location "Knaus" .
+
+#======================
+
+#===== Dates ==========
+
+#:Mandag a :Date ;
+#	:date "2016-08-01" .
+
+#:Tirsdag a :Time ;
+#	:time "tirsdag" .
+
+#======================
+
+#=================================

@@ -1,0 +1,145 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://example.org/schemas/live_concert#>
+
+
+SELECT ?artist ?artistname ?rep ?song
+	WHERE { 
+		?artist a :Artist .
+		?artist :artistName ?artistname .
+		?artist :artistRepertoire ?rep .
+		?rep :repertoireSongs ?song
+	}
+
+SELECT (COUNT(DISTINCT ?instance) AS ?count) 
+    WHERE {
+        ?instance a :Repertoire; 
+    }
+
+SELECT ?songname (COUNT(?songname) AS ?count) ?rep
+WHERE { 
+	?artist a :Artist ;
+		:artistRepertoire ?rep .
+	?rep :repertoireSongs ?song .
+	?song :songName ?songname .
+}
+GROUP BY ?songname ?rep
+
+
+#======= FIRST ASSIGNMENT IN 2 ========
+
+# Formulate a SPARQL query that lists all concerts of a given genre and its subgenres that have not yet been held.
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://example.org/schemas/live_concert#>
+
+SELECT ?concert ?artist ?genre ?date
+WHERE { 
+	?concert a :LiveConcert .
+	?concert :concertDate ?date .
+	?concert :concertArtist ?artist .
+	?artist :artistGenre ?genre .
+	?genre rdfs:subClassOf* :Metal .
+	FILTER(?date > "2016-08-02"^^xsd:date)
+}
+
+#======================================
+
+#======= SECOND ASSIGNMENT IN 2 =======
+
+# Use SPARQL to count and list the songs that two artists share.
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://example.org/schemas/live_concert#>
+
+SELECT DISTINCT ?songname (COUNT(DISTINCT ?artist) AS ?count)
+WHERE { 
+	?artist a :Artist ;
+		:artistRepertoire ?rep .
+	?rep :repertoireSongs ?song .
+	?song :songName ?songname .
+}
+GROUP BY ?songname
+HAVING (?count > 1)
+
+#======================================
+#== Count how many songs two artists share ==
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://example.org/schemas/live_concert#>
+
+SELECT DISTINCT (STR(COUNT(?song2)) AS ?count) ?artist1 ?artist2
+WHERE { 
+	?artist1 a :Artist ;
+		:artistRepertoire ?rep1 .
+	?rep1 :repertoireSongs ?song1 .
+	?artist2 a :Artist ;
+		:artistRepertoire ?rep2 .
+	?rep2 :repertoireSongs ?song2 .
+	FILTER(?artist1 != ?artist2 && ?song1 = ?song2)
+}
+GROUP BY ?artist1 ?artist2
+
+#== Songs that two artists share ==
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://example.org/schemas/live_concert#>
+
+SELECT DISTINCT ?song1 ?artist1 ?artist2
+WHERE { 
+	?artist1 a :Artist ;
+		:artistRepertoire ?rep1 .
+	?rep1 :repertoireSongs ?song1 .
+	?artist2 a :Artist ;
+		:artistRepertoire ?rep2 .
+	?rep2 :repertoireSongs ?song2 .
+	FILTER(?artist1 != ?artist2 && ?song1 = ?song2)
+}
+GROUP BY ?artist1 ?artist2 ?song1
+
+#== Songs that two distinct artists share ==
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://example.org/schemas/live_concert#>
+
+SELECT DISTINCT ?artist1 ?artist2 ?song1
+WHERE { 
+	?artist1 rdf:type :Artist ;
+		:artistRepertoire ?rep1 .
+	?rep1 :repertoireSongs ?song1 .
+	?artist2 rdf:type :Artist ;
+		:artistRepertoire ?rep2 .
+	?rep2 :repertoireSongs ?song2 .
+	FILTER(?artist1 = :Mastodon && ?artist2 = :TheSword && ?song1 = ?song2)
+}
+
+#== Count of songs two distinct artists share == 
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://example.org/schemas/live_concert#>
+
+SELECT ?artist1 ?artist2 (STR(COUNT(DISTINCT ?song1)) AS ?count)
+WHERE { 
+	?artist1 rdf:type :Artist ;
+		:artistRepertoire ?rep1 .
+	?rep1 :repertoireSongs ?song1 .
+	?artist2 rdf:type :Artist ;
+		:artistRepertoire ?rep2 .
+	?rep2 :repertoireSongs ?song2 .
+	FILTER(?artist1 = :Mastodon && ?artist2 = :TheSword && ?song1 = ?song2)
+}
+GROUP BY ?artist1 ?artist2
