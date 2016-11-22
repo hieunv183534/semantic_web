@@ -28,7 +28,7 @@ WHERE {
 GROUP BY ?songname ?rep
 
 
-#======= FIRST ASSIGNMENT IN 2 ========
+#======= FIRST ASSIGNMENT IN TASK 2 ========
 
 # Formulate a SPARQL query that lists all concerts of a given genre and its subgenres that have not yet been held.
 
@@ -39,19 +39,21 @@ PREFIX : <http://example.org/schemas/live_concert#>
 
 SELECT ?concert ?artist ?genre ?date
 WHERE { 
-	?concert a :LiveConcert .
-	?concert :concertDate ?date .
-	?concert :concertArtist ?artist .
+	?concert a :LiveConcert ;
+		:concertDate ?date ;
+		:concertArtist ?artist .
 	?artist :artistGenre ?genre .
-	?genre rdfs:subClassOf* :Metal .
-	FILTER(?date > "2016-08-02"^^xsd:date)
+	?genre rdfs:subClassOf* :Rock .
+	FILTER(?date > "2016-07-02T22:00:00"^^xsd:dateTime)
 }
 
 #======================================
 
-#======= SECOND ASSIGNMENT IN 2 =======
+#======= SECOND ASSIGNMENT IN TASK 2 =======
 
 # Use SPARQL to count and list the songs that two artists share.
+
+#== Count how many artists that play a song ==
 
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -69,14 +71,14 @@ GROUP BY ?songname
 HAVING (?count > 1)
 
 #======================================
-#== Count how many songs two artists share ==
+#== Count how many songs artists share ==
 
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX : <http://example.org/schemas/live_concert#>
 
-SELECT DISTINCT (STR(COUNT(?song2)) AS ?count) ?artist1 ?artist2
+SELECT DISTINCT (STR(COUNT(?song1)) AS ?count) ?artist1 ?artist2
 WHERE { 
 	?artist1 a :Artist ;
 		:artistRepertoire ?rep1 .
@@ -88,7 +90,7 @@ WHERE {
 }
 GROUP BY ?artist1 ?artist2
 
-#== Songs that two artists share ==
+#== Songs that artists share ==
 
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -122,7 +124,7 @@ WHERE {
 	?artist2 rdf:type :Artist ;
 		:artistRepertoire ?rep2 .
 	?rep2 :repertoireSongs ?song2 .
-	FILTER(?artist1 = :Mastodon && ?artist2 = :TheSword && ?song1 = ?song2)
+	FILTER(?artist1 = :Mastodon && ?artist2 = :BlackSabbath && ?song1 = ?song2)
 }
 
 #== Count of songs two distinct artists share == 
@@ -140,6 +142,85 @@ WHERE {
 	?artist2 rdf:type :Artist ;
 		:artistRepertoire ?rep2 .
 	?rep2 :repertoireSongs ?song2 .
-	FILTER(?artist1 = :Mastodon && ?artist2 = :TheSword && ?song1 = ?song2)
+	FILTER(?artist1 = :Mastodon && ?artist2 = :BlackSabbath && ?song1 = ?song2)
 }
 GROUP BY ?artist1 ?artist2
+
+#=========== THIRD ASSIGNMENT IN TASK 2 =========
+
+# We want to know more about the artists than what is included in your ontology.  
+# Show how you in SPARQL can combine your ontology with DBpedia to list the birth dates 
+# and possibly the children of the artists you added into your ontology.
+
+#== Endpoint for dbpedia in Apache Jena ==
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://example.org/schemas/live_concert#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+
+SELECT ?name ?bandMembers ?child (STR(MIN(?birthDates)) AS ?BirthDates)#(STR(?name) AS ?bandName) ?bandMembers ?children
+WHERE {
+	?artist a :Artist ;
+		:artistName ?artistName .
+	SERVICE <http://dbpedia.org/sparql> {
+		?band a dbo:Band ;
+			dbp:name ?name ;
+    		dbo:bandMember ?bandMembers .
+    	#OPTIONAL{ ?bandMembers dbp:name ?bandMembersName }
+    	OPTIONAL{ ?bandMembers dbo:birthDate ?birthDates . }
+    	OPTIONAL{ ?child dbo:parent ?bandMembers . }
+	}
+  	FILTER(str(?name) = ?artistName)
+}
+GROUP BY ?name ?bandMembers ?child
+
+#=======================================
+#=== Version 2====
+
+SELECT ?name ?bandMembers (MIN(?bandMembersName) AS ?BandMembersName) ?child (MIN(?childName) AS ?ChildName) (STR(MIN(?birthDates)) AS ?BirthDates)
+WHERE {
+	?artist a :Artist ;
+		:artistName ?artistName .
+	SERVICE <http://dbpedia.org/sparql> {
+		?band a dbo:Band ;
+			dbp:name ?name ;
+    		dbo:bandMember ?bandMembers .
+    	OPTIONAL{ ?bandMembers dbp:name ?bandMembersName }
+    	OPTIONAL{ ?bandMembers dbo:birthDate ?birthDates . }
+    	OPTIONAL{ 
+      		?child dbo:parent ?bandMembers .
+      		?child dbp:name ?childName .
+    	}
+	}
+  	FILTER(str(?name) = ?artistName)
+}
+GROUP BY ?name ?bandMembers ?child
+
+#========= FOURTH ASSIGNMENT IN TASK 2 =======
+
+# How can you use SPARQL to find the most similar – as you define it – artist to a given artist.
+
+#=== Based on the assumption that an artist is more similiar for the number of songs they share ===
+#=== (Does not take into account that more than one artist can be just as similar) ===
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://example.org/schemas/live_concert#>
+
+SELECT ?artist1 ?artist2 (COUNT(DISTINCT ?song1) AS ?count)
+WHERE { 
+	?artist1 a :Artist ;
+		:artistRepertoire ?rep1 .
+	?rep1 :repertoireSongs ?song1 .
+	?artist2 a :Artist ;
+		:artistRepertoire ?rep2 .
+	?rep2 :repertoireSongs ?song2 .
+	FILTER(?artist1 = :Mastodon && ?artist2 != :Mastodon && ?song1 = ?song2)
+}
+GROUP BY ?artist1 ?artist2
+ORDER BY DESC(?count)
+LIMIT 1

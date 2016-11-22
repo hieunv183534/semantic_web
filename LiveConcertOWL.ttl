@@ -1,6 +1,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix : <http://example.org/schemas/live_concert#> .
 
 
@@ -8,15 +9,20 @@
 
 #===== Classes ========
 
-:ConcertTour a rdfs:Class .
-:LiveConcert a rdfs:Class .
-:Artist a rdfs:Class .
-:Song a rdfs:Class .
-:Repertoire a rdfs:Class .
+:ConcertTour a owl:Class .
+:LiveConcert a owl:Class .
+:Artist a owl:Class .
+:Song a owl:Class .
+:Repertoire rdfs:subClassOf [ 
+    a owl:Restriction ; 
+    owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ; 
+    owl:Property :repertoireSongs ;
+    owl:onClass :Song
+] .
 
-:Location a rdfs:Class .
+:Location a owl:Class .
 
-:Genre a rdfs:Class .
+:Genre a owl:Class .
 :Rock rdfs:subClassOf :Genre .
 :Electronica rdfs:subClassOf :Genre .
 :Doom rdfs:subClassOf :Rock .
@@ -27,45 +33,45 @@
 
 #===== Properties =====
 
-:concerts a rdf:Property ;
+:concerts a owl:ObjectProperty ;
 	rdfs:domain :ConcertTour ;
 	rdfs:range :LiveConcert .
 
-:concertArtist a rdf:Property ;
+:concertArtist a owl:ObjectProperty ;
 	rdfs:domain :LiveConcert ;
 	rdfs:range :Artist .
 
-:concertDate a rdf:Property ;
+:concertDate a rdf:DataTypeProperty ;
 	rdfs:domain :LiveConcert ;
 	rdfs:range xsd:dateTime .
 
-:concertLocation a rdf:Property ;
+:concertLocation a owl:ObjectProperty ;
 	rdfs:domain :LiveConcert ;
 	rdfs:range :Location .
 
-:location a rdfs:Property ;
+:location a rdfs:DataTypeProperty ;
 	rdfs:domain :Location ;
 	rdfs:range rdfs:Literal .
 
-:artistName a rdf:Property ;
+:artistName a owl:ObjectProperty ;
 	rdfs:domain :Artist ;
-    rdfs:range rdfs:Literal .
+    rdfs:range xsd:String .
 
-:artistGenre a rdf:Property ;
+:artistGenre a owl:ObjectProperty ;
 	rdfs:domain :Artist ;
 	rdfs:range :Genre .
 
-:artistRepertoire a rdf:Property ;
+:artistRepertoire a owl:ObjectProperty ;
 	rdfs:domain :Artist ;
 	rdfs:range :Repertoire .
 
-:repertoireSongs a rdf:Property ;
+:repertoireSongs a owl:ObjectProperty ;
 	rdfs:domain :Repertoire ;
 	rdfs:range :Song .
 
-:songName a rdf:Property ;
+:songName a owl:DataTypeProperty ;
 	rdfs:domain :Song ;
-	rdfs:range rdfs:Literal .
+	rdfs:range xsd:String .
 
 #======================
 
