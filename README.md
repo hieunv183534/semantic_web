@@ -5,4 +5,4 @@ Project in TDT44 - Semantic Web
 
 Terminal command to run server: ./fuseki-server --update --port 3000
 
-2. Upload files to server and write SPARQL commands
+2. Upload files to server and write SPARQL queries
