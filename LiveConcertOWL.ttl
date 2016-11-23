@@ -1,222 +1,473 @@
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix : <http://example.org/schemas/live_concert#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.w3.org/2002/07/owl#> .
+
+[ rdf:type owl:Ontology
+ ] .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://example.org/schemas/live_concert#artistGenre
+:artistGenre rdf:type owl:ObjectProperty ;
+             rdfs:domain :Artist ;
+             rdfs:range :Genre .
 
 
-#===== Defnitions ================
+###  http://example.org/schemas/live_concert#artistRepertoire
+:artistRepertoire rdf:type owl:ObjectProperty ;
+                  rdfs:domain :Artist ;
+                  rdfs:range :Repertoire .
 
-#===== Classes ========
 
-:ConcertTour a owl:Class .
-:LiveConcert a owl:Class .
-:Artist a owl:Class .
-:Song a owl:Class .
-:Repertoire rdfs:subClassOf [ 
-    a owl:Restriction ; 
-    owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ; 
-    owl:Property :repertoireSongs ;
-    owl:onClass :Song
-] .
+###  http://example.org/schemas/live_concert#concertArtist
+:concertArtist rdf:type owl:ObjectProperty ;
+               owl:inverseOf :playsAt ;
+               rdfs:domain :LiveConcert ;
+               rdfs:range :Artist .
 
-:Location a owl:Class .
 
-:Genre a owl:Class .
-:Rock rdfs:subClassOf :Genre .
-:Electronica rdfs:subClassOf :Genre .
-:Doom rdfs:subClassOf :Rock .
-:HipHop rdfs:subClassOf :Genre .
-:Metal rdfs:subClassOf :Rock .
+###  http://example.org/schemas/live_concert#concertLocation
+:concertLocation rdf:type owl:ObjectProperty ;
+                 rdfs:domain :LiveConcert ;
+                 rdfs:range :Location .
 
-#======================
 
-#===== Properties =====
+###  http://example.org/schemas/live_concert#concerts
+:concerts rdf:type owl:ObjectProperty ;
+          rdfs:domain :ConcertTour ;
+          rdfs:range :LiveConcert .
 
-:concerts a owl:ObjectProperty ;
-	rdfs:domain :ConcertTour ;
-	rdfs:range :LiveConcert .
 
-:concertArtist a owl:ObjectProperty ;
-	rdfs:domain :LiveConcert ;
-	rdfs:range :Artist .
+###  http://example.org/schemas/live_concert#playsAt
+:playsAt rdf:type owl:ObjectProperty ;
+         rdfs:domain :Artist ;
+         rdfs:range :LiveConcert .
 
-:concertDate a rdf:DataTypeProperty ;
-	rdfs:domain :LiveConcert ;
-	rdfs:range xsd:dateTime .
 
-:concertLocation a owl:ObjectProperty ;
-	rdfs:domain :LiveConcert ;
-	rdfs:range :Location .
+###  http://example.org/schemas/live_concert#repertoireSongs
+:repertoireSongs rdf:type owl:ObjectProperty ;
+                 rdfs:domain :Repertoire ;
+                 rdfs:range :Song .
 
-:location a rdfs:DataTypeProperty ;
-	rdfs:domain :Location ;
-	rdfs:range rdfs:Literal .
 
-:artistName a owl:ObjectProperty ;
-	rdfs:domain :Artist ;
-    rdfs:range xsd:String .
+#################################################################
+#    Data properties
+#################################################################
 
-:artistGenre a owl:ObjectProperty ;
-	rdfs:domain :Artist ;
-	rdfs:range :Genre .
+###  http://example.org/schemas/live_concert#artistName
+:artistName rdf:type owl:DatatypeProperty ;
+            rdfs:domain :Artist ;
+            rdfs:range rdfs:Literal .
 
-:artistRepertoire a owl:ObjectProperty ;
-	rdfs:domain :Artist ;
-	rdfs:range :Repertoire .
 
-:repertoireSongs a owl:ObjectProperty ;
-	rdfs:domain :Repertoire ;
-	rdfs:range :Song .
+###  http://example.org/schemas/live_concert#concertDate
+:concertDate rdf:type owl:DatatypeProperty ;
+             rdfs:domain :LiveConcert ;
+             rdfs:range xsd:dateTime .
 
-:songName a owl:DataTypeProperty ;
-	rdfs:domain :Song ;
-	rdfs:range xsd:String .
 
-#======================
+###  http://example.org/schemas/live_concert#location
+:location rdf:type owl:DatatypeProperty ;
+          rdfs:domain :Location ;
+          rdfs:range rdfs:Literal .
 
-#=================================
 
-#===== Instances =================
+###  http://example.org/schemas/live_concert#songName
+:songName rdf:type owl:DatatypeProperty ;
+          rdfs:domain :Song ;
+          rdfs:range rdfs:Literal .
 
-#===== LiveConcerts ===
 
-:BlackSabbathConcert1 a :LiveConcert ;
-	:concertArtist :BlackSabbath ;
-	:concertDate "2016-08-01T22:00:00"^^xsd:dateTime ;
-	:concertLocation :Storsalen .
+#################################################################
+#    Classes
+#################################################################
 
-:CypressHillConcert1 a :LiveConcert ;
-	:concertArtist :CypressHill ;
-	:concertDate "2016-08-02T22:00:00"^^xsd:dateTime ;
-	:concertLocation :Storsalen .
+###  http://example.org/schemas/live_concert#Artist
+:Artist rdf:type owl:Class ;
+        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                          owl:onProperty :artistGenre ;
+                          owl:allValuesFrom [ rdf:type owl:Class ;
+                                              owl:unionOf ( :Doom
+                                                            :Electronica
+                                                            :Genre
+                                                            :HipHop
+                                                            :Metal
+                                                            :Rock
+                                                          )
+                                            ]
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :artistRepertoire ;
+                          owl:allValuesFrom :Repertoire
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :artistName ;
+                          owl:allValuesFrom xsd:string
+                        ] ;
+        owl:disjointWith :ConcertTour ,
+                         :Genre ,
+                         :LiveConcert ,
+                         :Location ,
+                         :Repertoire ,
+                         :Song ,
+                         rdfs:Property .
 
-:GorillazConcert1 a :LiveConcert ;
-	:concertArtist :Gorillaz ;
-	:concertDate "2016-08-03T22:00:00"^^xsd:dateTime ;
-	:concertLocation :Storsalen .
 
-:MastodonConcert1 a :LiveConcert ;
-	:concertArtist :Mastodon ;
-	:concertDate "2016-08-04T22:00:00"^^xsd:dateTime ;
-	:concertLocation :Storsalen .
+###  http://example.org/schemas/live_concert#ConcertTour
+:ConcertTour rdf:type owl:Class ;
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty :concerts ;
+                               owl:allValuesFrom :LiveConcert
+                             ] ;
+             owl:disjointWith :Genre ,
+                              :LiveConcert ,
+                              :Location ,
+                              :Repertoire ,
+                              :Song ,
+                              rdfs:Property .
 
-:KraftwerkConcert1 a :LiveConcert ;
-	:concertArtist :Kraftwerk ;
-	:concertDate "2016-08-05T22:00:00"^^xsd:dateTime ;
-	:concertLocation :Storsalen .
 
-:BlackSabbathConcert2 a :LiveConcert ;
-	:concertArtist :BlackSabbath ;
-	:concertDate "2016-08-02T22:00:00"^^xsd:dateTime ;
-	:concertLocation :Knaus .
+###  http://example.org/schemas/live_concert#Doom
+:Doom rdf:type owl:Class ;
+      rdfs:subClassOf :Rock .
 
-:CypressHillConcert2 a :LiveConcert ;
-	:concertArtist :CypressHill ;
-	:concertDate "2016-08-03T22:00:00"^^xsd:dateTime ;
-	:concertLocation :Knaus .
 
-:GorillazConcert2 a :LiveConcert ;
-	:concertArtist :Gorillaz ;
-	:concertDate "2016-08-04T22:00:00"^^xsd:dateTime ;
-	:concertLocation :Knaus .
+###  http://example.org/schemas/live_concert#Electronica
+:Electronica rdf:type owl:Class ;
+             rdfs:subClassOf :Genre .
 
-:MastodonConcert2 a :LiveConcert ;
-	:concertArtist :Mastodon ;
-	:concertDate "2016-08-05T22:00:00"^^xsd:dateTime ;
-	:concertLocation :Knaus .
 
-:KraftwerkConcert2 a :LiveConcert ;
-	:concertArtist :Kraftwerk ;
-	:concertDate "2016-08-06T22:00:00"^^xsd:dateTime ;
-	:concertLocation :Knaus .
+###  http://example.org/schemas/live_concert#Genre
+:Genre rdf:type owl:Class ;
+       owl:disjointWith :LiveConcert ,
+                        :Location ,
+                        :Repertoire ,
+                        :Song ,
+                        rdfs:Property .
 
-#======================
 
-#===== Artists ========
+###  http://example.org/schemas/live_concert#HipHop
+:HipHop rdf:type owl:Class ;
+        rdfs:subClassOf :Genre .
 
-:BlackSabbath a :Artist ;
-	:artistName "Black Sabbath" ;
-	:artistGenre :Rock ;
-	:artistRepertoire :rep1, :rep2 .
 
-:CypressHill a :Artist ;
-	:artistName "Cypress Hill" ;
-	:artistGenre :HipHop ;
-	:artistRepertoire :rep2, :rep3 .
+###  http://example.org/schemas/live_concert#LiveConcert
+:LiveConcert rdf:type owl:Class ;
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty :concertArtist ;
+                               owl:allValuesFrom :Artist
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :concertLocation ;
+                               owl:allValuesFrom :Location
+                             ] ;
+             owl:disjointWith :Location ,
+                              :Repertoire ,
+                              :Song ,
+                              rdfs:Property .
 
-:Gorillaz a :Artist ;
-	:artistName "Gorillaz" ;
-	:artistGenre :Electronica, :HipHop ;
-	:artistRepertoire :rep3, :rep4 .
 
-:Mastodon a :Artist ;
-	:artistName "Mastodon" ;
-	:artistGenre :Metal ;
-	:artistRepertoire :rep4, :rep5 .
+###  http://example.org/schemas/live_concert#Location
+:Location rdf:type owl:Class ;
+          rdfs:subClassOf [ rdf:type owl:Restriction ;
+                            owl:onProperty :location ;
+                            owl:allValuesFrom xsd:string
+                          ] ;
+          owl:disjointWith :Repertoire ,
+                           :Song ,
+                           rdfs:Property .
 
-:Kraftwerk a :Artist ;
-	:artistName "Kraftwerk" ;
-	:artistGenre :Electronica ;
-	:artistRepertoire :rep5, :rep1, :rep6 .
 
-#======================
+###  http://example.org/schemas/live_concert#Metal
+:Metal rdf:type owl:Class ;
+       rdfs:subClassOf :Rock .
 
-#===== Songs ==========
 
-:war_pigs a :Song ;
-	:songName "War Pigs" .
+###  http://example.org/schemas/live_concert#Repertoire
+:Repertoire rdf:type owl:Class ;
+            rdfs:subClassOf [ rdf:type owl:Restriction ;
+                              owl:onProperty :repertoireSongs ;
+                              owl:allValuesFrom :Song
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :repertoireSongs ;
+                              owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                              owl:onClass :Song
+                            ] ;
+            owl:disjointWith :Song ,
+                             rdfs:Property .
 
-:feel_good_inc a :Song ;
-	:songName "Feel Good inc." .
 
-:insane_in_the_brain a :Song ;
-	:songName "Insane in the Brain" .
+###  http://example.org/schemas/live_concert#Rock
+:Rock rdf:type owl:Class ;
+      rdfs:subClassOf :Genre .
 
-:autobahn a :Song ;
-	:songName "Autobahn" .
 
-:oblivion a :Song ;
-	:songName "Oblivion" .
+###  http://example.org/schemas/live_concert#Song
+:Song rdf:type owl:Class ;
+      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                        owl:onProperty :songName ;
+                        owl:allValuesFrom xsd:string
+                      ] ;
+      owl:disjointWith rdfs:Property .
 
-:paranoid a :Song ;
-	:songName "Paranoid" .
 
-:clint_eastwood a :Song ;
-	:songName "Clint Eastwood" .
+###  http://www.w3.org/2000/01/rdf-schema#Property
+rdfs:Property rdf:type owl:Class .
 
-#======================
 
-#===== Repertoires ====
+#################################################################
+#    Individuals
+#################################################################
 
-:rep1 a :Repertoire ;
-	:repertoireSongs :war_pigs, :paranoid .
+###  http://example.org/schemas/live_concert#BlackSabbath
+:BlackSabbath rdf:type owl:NamedIndividual ,
+                       :Artist ;
+              :artistGenre :Rock ;
+              :artistRepertoire :rep1 ,
+                                :rep2 ;
+              :artistName "Black Sabbath" .
 
-:rep2 a :Repertoire ;
-	:repertoireSongs :war_pigs, :paranoid, :insane_in_the_brain .
 
-:rep3 a :Repertoire ;
-	:repertoireSongs :insane_in_the_brain, :clint_eastwood .
+###  http://example.org/schemas/live_concert#BlackSabbathConcert1
+:BlackSabbathConcert1 rdf:type owl:NamedIndividual ,
+                               :LiveConcert ;
+                      :concertArtist :BlackSabbath ;
+                      :concertLocation :Storsalen ;
+                      :concertDate "2016-08-01T22:00:00"^^xsd:dateTime .
 
-:rep4 a :Repertoire ;
-	:repertoireSongs :feel_good_inc, :clint_eastwood .
 
-:rep5 a :Repertoire ;
-	:repertoireSongs :oblivion, :war_pigs .
+###  http://example.org/schemas/live_concert#BlackSabbathConcert2
+:BlackSabbathConcert2 rdf:type owl:NamedIndividual ,
+                               :LiveConcert ;
+                      :concertArtist :BlackSabbath ;
+                      :concertLocation :Knaus ;
+                      :concertDate "2016-08-02T22:00:00"^^xsd:dateTime .
 
-:rep6 a :Repertoire ;
-	:repertoireSongs :autobahn .
 
-#======================
+###  http://example.org/schemas/live_concert#CypressHill
+:CypressHill rdf:type owl:NamedIndividual ,
+                      :Artist ;
+             :artistGenre :HipHop ;
+             :artistRepertoire :rep2 ,
+                               :rep3 ;
+             :artistName "Cypress Hill" .
 
-#===== Locations ======
 
-:Storsalen a :Location ;
-	:location "Storsalen" .
+###  http://example.org/schemas/live_concert#CypressHillConcert1
+:CypressHillConcert1 rdf:type owl:NamedIndividual ,
+                              :LiveConcert ;
+                     :concertArtist :CypressHill ;
+                     :concertLocation :Storsalen ;
+                     :concertDate "2016-08-02T22:00:00"^^xsd:dateTime .
 
-:Knaus a :Location ;
-	:location "Knaus" .
 
-#======================
+###  http://example.org/schemas/live_concert#CypressHillConcert2
+:CypressHillConcert2 rdf:type owl:NamedIndividual ,
+                              :LiveConcert ;
+                     :concertArtist :CypressHill ;
+                     :concertLocation :Knaus ;
+                     :concertDate "2016-08-03T22:00:00"^^xsd:dateTime .
 
-#=================================
+
+###  http://example.org/schemas/live_concert#Electronica
+:Electronica rdf:type owl:NamedIndividual .
+
+
+###  http://example.org/schemas/live_concert#Gorillaz
+:Gorillaz rdf:type owl:NamedIndividual ,
+                   :Artist ;
+          :artistGenre :Electronica ,
+                       :HipHop ;
+          :artistRepertoire :rep3 ,
+                            :rep4 ;
+          :artistName "Gorillaz" .
+
+
+###  http://example.org/schemas/live_concert#GorillazConcert1
+:GorillazConcert1 rdf:type owl:NamedIndividual ,
+                           :LiveConcert ;
+                  :concertArtist :Gorillaz ;
+                  :concertLocation :Storsalen ;
+                  :concertDate "2016-08-03T22:00:00"^^xsd:dateTime .
+
+
+###  http://example.org/schemas/live_concert#GorillazConcert2
+:GorillazConcert2 rdf:type owl:NamedIndividual ,
+                           :LiveConcert ;
+                  :concertArtist :Gorillaz ;
+                  :concertLocation :Knaus ;
+                  :concertDate "2016-08-04T22:00:00"^^xsd:dateTime .
+
+
+###  http://example.org/schemas/live_concert#HipHop
+:HipHop rdf:type owl:NamedIndividual .
+
+
+###  http://example.org/schemas/live_concert#Knaus
+:Knaus rdf:type owl:NamedIndividual ,
+                :Location ;
+       :location "Knaus" .
+
+
+###  http://example.org/schemas/live_concert#Kraftwerk
+:Kraftwerk rdf:type owl:NamedIndividual ,
+                    :Artist ;
+           :artistGenre :Electronica ;
+           :artistRepertoire :rep1 ,
+                             :rep5 ,
+                             :rep6 ;
+           :artistName "Kraftwerk" .
+
+
+###  http://example.org/schemas/live_concert#KraftwerkConcert1
+:KraftwerkConcert1 rdf:type owl:NamedIndividual ,
+                            :LiveConcert ;
+                   :concertArtist :Kraftwerk ;
+                   :concertLocation :Storsalen ;
+                   :concertDate "2016-08-05T22:00:00"^^xsd:dateTime .
+
+
+###  http://example.org/schemas/live_concert#KraftwerkConcert2
+:KraftwerkConcert2 rdf:type owl:NamedIndividual ,
+                            :LiveConcert ;
+                   :concertArtist :Kraftwerk ;
+                   :concertLocation :Knaus ;
+                   :concertDate "2016-08-06T22:00:00"^^xsd:dateTime .
+
+
+###  http://example.org/schemas/live_concert#Mastodon
+:Mastodon rdf:type owl:NamedIndividual ,
+                   :Artist ;
+          :artistGenre :Metal ;
+          :artistRepertoire :rep4 ,
+                            :rep5 ;
+          :artistName "Mastodon" .
+
+
+###  http://example.org/schemas/live_concert#MastodonConcert1
+:MastodonConcert1 rdf:type owl:NamedIndividual ,
+                           :LiveConcert ;
+                  :concertArtist :Mastodon ;
+                  :concertLocation :Storsalen ;
+                  :concertDate "2016-08-04T22:00:00"^^xsd:dateTime .
+
+
+###  http://example.org/schemas/live_concert#MastodonConcert2
+:MastodonConcert2 rdf:type owl:NamedIndividual ,
+                           :LiveConcert ;
+                  :concertArtist :Mastodon ;
+                  :concertLocation :Knaus ;
+                  :concertDate "2016-08-05T22:00:00"^^xsd:dateTime .
+
+
+###  http://example.org/schemas/live_concert#Metal
+:Metal rdf:type owl:NamedIndividual .
+
+
+###  http://example.org/schemas/live_concert#Rock
+:Rock rdf:type owl:NamedIndividual .
+
+
+###  http://example.org/schemas/live_concert#Storsalen
+:Storsalen rdf:type owl:NamedIndividual ,
+                    :Location ;
+           :location "Storsalen" .
+
+
+###  http://example.org/schemas/live_concert#autobahn
+:autobahn rdf:type owl:NamedIndividual ,
+                   :Song ;
+          :songName "Autobahn" .
+
+
+###  http://example.org/schemas/live_concert#clint_eastwood
+:clint_eastwood rdf:type owl:NamedIndividual ,
+                         :Song ;
+                :songName "Clint Eastwood" .
+
+
+###  http://example.org/schemas/live_concert#feel_good_inc
+:feel_good_inc rdf:type owl:NamedIndividual ,
+                        :Song ;
+               :songName "Feel Good inc." .
+
+
+###  http://example.org/schemas/live_concert#insane_in_the_brain
+:insane_in_the_brain rdf:type owl:NamedIndividual ,
+                              :Song ;
+                     :songName "Insane in the Brain" .
+
+
+###  http://example.org/schemas/live_concert#location
+:location rdf:type owl:NamedIndividual ,
+                   rdfs:Property .
+
+
+###  http://example.org/schemas/live_concert#oblivion
+:oblivion rdf:type owl:NamedIndividual ,
+                   :Song ;
+          :songName "Oblivion" .
+
+
+###  http://example.org/schemas/live_concert#paranoid
+:paranoid rdf:type owl:NamedIndividual ,
+                   :Song ;
+          :songName "Paranoid" .
+
+
+###  http://example.org/schemas/live_concert#rep1
+:rep1 rdf:type owl:NamedIndividual ,
+               :Repertoire ;
+      :repertoireSongs :paranoid ,
+                       :war_pigs .
+
+
+###  http://example.org/schemas/live_concert#rep2
+:rep2 rdf:type owl:NamedIndividual ,
+               :Repertoire ;
+      :repertoireSongs :insane_in_the_brain ,
+                       :paranoid ,
+                       :war_pigs .
+
+
+###  http://example.org/schemas/live_concert#rep3
+:rep3 rdf:type owl:NamedIndividual ,
+               :Repertoire ;
+      :repertoireSongs :clint_eastwood ,
+                       :insane_in_the_brain .
+
+
+###  http://example.org/schemas/live_concert#rep4
+:rep4 rdf:type owl:NamedIndividual ,
+               :Repertoire ;
+      :repertoireSongs :clint_eastwood ,
+                       :feel_good_inc .
+
+
+###  http://example.org/schemas/live_concert#rep5
+:rep5 rdf:type owl:NamedIndividual ,
+               :Repertoire ;
+      :repertoireSongs :oblivion ,
+                       :war_pigs .
+
+
+###  http://example.org/schemas/live_concert#rep6
+:rep6 rdf:type owl:NamedIndividual ,
+               :Repertoire ;
+      :repertoireSongs :autobahn .
+
+
+###  http://example.org/schemas/live_concert#war_pigs
+:war_pigs rdf:type owl:NamedIndividual ,
+                   :Song ;
+          :songName "War Pigs" .
+
+
+###  Generated by the OWL API (version 4.2.6.20160910-2108) https://github.com/owlcs/owlapi
