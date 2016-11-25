@@ -95,7 +95,6 @@
                           owl:allValuesFrom [ rdf:type owl:Class ;
                                               owl:unionOf ( :Doom
                                                             :Electronica
-                                                            :Genre
                                                             :HipHop
                                                             :Metal
                                                             :Rock
@@ -124,6 +123,11 @@
              rdfs:subClassOf [ rdf:type owl:Restriction ;
                                owl:onProperty :concerts ;
                                owl:allValuesFrom :LiveConcert
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :concerts ;
+                               owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                               owl:onClass :LiveConcert
                              ] ;
              owl:disjointWith :Genre ,
                               :LiveConcert ,
