@@ -1,0 +1,87 @@
+@prefix : <http://example.org/schemas/test#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.w3.org/2002/07/owl#> .
+
+
+# class
+
+:Concert a rdfs:Class ;
+        owl:disjointWith :Location , :Song , rdfs:Property .
+
+
+:Singer a rdfs:Class .
+:Song a rdfs:Class .
+
+:Location a rdfs:Class .
+
+:Genre a rdfs:Class .
+:RedMusic rdfs:subClassOf :Genre .
+:YellowMusic rdfs:subClassOf :Genre .
+:Bolero rdfs:subClassOf :Genre .
+:CaiLuong rdfs:subClassOf :Genre .
+
+#property
+
+:concertDate a rdf:Property ;
+	rdfs:domain :Concert ;
+	rdfs:range xsd:dateTime .
+
+:concertLocation a rdf:Property ;
+	rdfs:domain :Concert ;
+	rdfs:range :Location .
+
+:concertSingers a rdf:Property ;
+	rdfs:domain :Concert ;
+	rdfs:range :Singer .
+
+:location a rdfs:Property ;
+	rdfs:domain :Location ;
+	rdfs:range rdfs:Literal .
+
+:singerGenres a rdf:Property ;
+	rdfs:domain :Singer ;
+	rdfs:range :Genre .
+
+:singerName a rdf:Property ;
+	rdfs:domain :Singer ;
+    rdfs:range rdfs:Literal .
+
+:singerSongs a rdf:Property ;
+	rdfs:domain :Singer ;
+	rdfs:range :Song .
+
+:songName a rdf:Property ;
+	rdfs:domain :Song ;
+	rdfs:range rdfs:Literal .
+
+:songGenre a rdf:Property ;
+	rdfs:domain :Song ;
+	rdfs:range rdfs:Genre .
+
+
+:Singer owl:equivalentClass [ rdf:type owl:Restriction ;
+		owl:onProperty :singerSongs ;
+		owl:allValuesFrom [ rdf:type owl:Restriction ;
+			owl:onProperty :songGenre ;
+			owl:someValuesFrom [ rdf:type owl:Restriction ;
+				owl:onProperty :singerGenres ;
+				owl:hasValue :Genre
+			]
+		]
+	].
+
+
+# data
+
+:veQueNgoai a :Song ;
+    :songName "Về quê ngoại okok" ;
+    :songGenre :YellowMusic.
+
+
+:veDauMaiTocNguoiThuong a :Song ;
+    :songName "Về đâu mái tóc người thương!!!" ;
+    :songGenre :Bolero.

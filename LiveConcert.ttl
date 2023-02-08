@@ -9,7 +9,7 @@
 #===== Classes ========
 
 :ConcertTour a rdfs:Class .
-:LiveConcert a rdfs:Class .
+:LiveConcert a rdfs:Class.
 :Artist a rdfs:Class .
 :Song a rdfs:Class .
 :Repertoire a rdfs:Class .
