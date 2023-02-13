@@ -74,6 +74,19 @@
 		]
 	].
 
+:Singer owl:equivalentClass [ 
+    rdf:type owl:Restriction ; 
+    owl:onProperty :concertSingers ; 
+    owl:allValuesFrom [ 
+        rdf:type owl:Restriction ; 
+        owl:onProperty :concertDate ; 
+        owl:hasValue [ rdf:type owl:Restriction ;             
+				owl:onProperty :concertDate ;             
+				owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;             
+				owl:onClass :Concert ] 
+    ] 
+].
+
 
 # data
 
