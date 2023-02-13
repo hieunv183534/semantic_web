@@ -90,7 +90,31 @@
     ] 
 ].
 
+:SingerConcert a rdfs:Class ;
+  rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :concertSingers ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    owl:hasValue :Singer
+  ] .
 
+
+:MusicianConcert a rdfs:Class ;
+  rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :concertSingers ;
+    owl:cardinality "1"^^xsd:nonNegativeInteger ;
+    owl:hasValue :Singer
+  ] ;
+  rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:onProperty :singerSongs ;
+    owl:allValuesFrom [
+      rdf:type owl:Restriction ;
+      owl:onProperty :songAuthor ;
+      owl:someValuesFrom :Musician
+    ]
+  ] .
 
 
 # data
