@@ -144,3 +144,107 @@
 <http://example.org/schemas/test#singerA> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/schemas/test#Singer> .
 <http://example.org/schemas/test#singerA> <http://example.org/schemas/test#singerName> "Singer A" .
 <http://example.org/schemas/test#singerA> <http://example.org/schemas/test#singerGenres> <http://example.org/schemas/test#RedMusic> .
+
+#location
+:haNoi a :Location;
+    :location "Ha Noi" .
+
+:thaiBinh a :Location;
+    :location "Thai Binh" .
+
+:daNang a :Location;
+    :location "Da Nang" .
+
+#singer
+:trungDuc a :Singer ;
+    :singerGenres :RedMusic ;
+    :singerName "Trung Duc" ;
+    :singerSongs :chaoEmCoGaiLamHong, :noiDaoXa, :menhMangTruongSa .
+
+:leThuy a :Singer ;
+    :singerGenres :CaiLuong ;
+    :singerName "Le Thuy" ;
+    :singerSongs :kiepNaoCoYeuNhau, :nguoiTinhTrenChienTran .
+
+:minhVuong a :Singer ;
+    :singerGenres :CaiLuong ;
+    :singerName "Minh Vuong" ;
+    :singerSongs :demLanhChuaHoang .
+
+:camLy a :Singer ;
+    :singerGenres :RedMusic ;
+    :singerName "Cam Ly" ;
+    :singerSongs :coGaiMoDuong .
+
+#song
+:chaoEmCoGaiLamHong a :Song ;
+    :songName "Chao em co gai Lam Hong" ;
+    :songGenre :RedMusic ;
+    :songAuthor :anhDuong .
+
+:kiepNaoCoYeuNhau a :Song ;
+    :songName "Kiep nao co yeu nhau" ;
+    :songGenre :CaiLuong ;
+    :songAuthor :hanhTrung .
+
+:noiDaoXa a :Song ;
+    :songName "Noi dao xa" ;
+    :songGenre :RedMusic ;
+    :songAuthor :theSong .
+
+:menhMangTruongSa a :Song ;
+    :songName "Menh mang Truong Sa" ;
+    :songGenre :RedMusic ;
+    :songAuthor :theSong .
+
+:nguoiTinhTrenChienTran a :Song ;
+    :songName "Nguoi tinh tren chien tran" ;
+    :songGenre :CaiLuong ;
+    :songAuthor :mocLinh .
+
+:demLanhChuaHoang a :Song ;
+    :songName "Dem lanh chua hoang" ;
+    :songGenre :CaiLuong ;
+    :songAuthor :mocLinh .
+
+:coGaiMoDuong a :Song ;
+    :songName "Co gai mo duong" ;
+    :songGenre :RedMusic ;
+    :songAuthor :xuanGiao .
+
+#musician
+:anhDuong a :Musician ;
+    :musicianName "Anh Duong" .
+
+:hanhTrung a :Musician ;
+    :musicianName "Hanh Trung" .
+
+:theSong a :Musician ;
+    :musicianName "The Song" .
+
+:mocLinh a :Musician ;
+    :musicianName "Moc Linh" .
+
+:xuanGiao a :Musician ;
+    :musicianName "Xuan Giao" .
+
+#concert
+:concertHoaHong a :Concert ;
+    :concertDate "2023-09-24" ;
+    :concertLocation :haNoi ;
+    :concertSingers :trungDuc .
+
+:concertHoaLan a :Concert ;
+    :concertDate "2023-08-24" ;
+    :concertLocation :thaiBinh ;
+    :concertSingers :leThuy, :trungDuc .
+
+:concertHoaChuoi a :Concert ;
+    :concertDate "2023-03-24" ;
+    :concertLocation :haNoi ;
+    :concertSingers :minhVuong, :trungDuc, :leThuy, :camLy .
+
+:concertHoaDao a :Concert ;
+    :concertDate "2022-03-24" ;
+    :concertLocation :daNang ;
+    :concertSingers :trungDuc, :leThuy, :camLy .
