@@ -18,7 +18,7 @@ WHERE {
 PREFIX : <http://example.org/schemas/test#>
 PREFIX  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
 
-SELECT ?singerName ?songName ?musicianName
+SELECT DISTINCT ?singerName ?songName ?musicianName
 WHERE {
   ?singer rdf:type :Singer ;
           :singerName ?singerName ;
