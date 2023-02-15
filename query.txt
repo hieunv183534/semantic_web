@@ -12,3 +12,16 @@ WHERE {
   ?loc :location ?location .
   ?concert :concertSingers ?singer .
 }
+
+
+
+PREFIX : <http://example.org/schemas/test#>
+SELECT ?singerName ?songName ?musicianName
+WHERE {
+  ?singer a :Singer ;
+          :singerName ?singerName ;
+          :singerSongs ?song .
+  ?song :songName ?songName ;
+        :songAuthor ?musician .
+  ?musician :musicianName ?musicianName .
+}
