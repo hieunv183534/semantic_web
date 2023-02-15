@@ -128,6 +128,102 @@
     :songName "Về đâu mái tóc người thương!!!" ;
     :songGenre :Bolero.
 
+## Concert May Lang Thang
+:concertMayLangThang a :Concert ;
+  :concertDate "2022-06-15T20:00:00"^^xsd:dateTime ;
+  :concertLocation :DaLat ;
+  :concertSingers :DanTruong, :LeQuyen .
+
+:DaLat a :Location ;
+  :location "Da Lat" .
+
+:DanTruong a :Singer ;
+  :singerName "Dan Truong" ;
+  :singerGenres :RedMusic, :Bolero ;
+  :singerSongs :VietNamNganNam, :TinhKhucVang .
+
+:LeQuyen a :Singer ;
+  :singerName "Le Quyen" ;
+  :singerGenres :YellowMusic, :CaiLuong ;
+  :singerSongs :ViEmConThuong, :ChuyenTinhLanVaDiep .
+
+:VietNamNganNam a :Song ;
+  :songName "Viet Nam ngan dam" ;
+  :songGenre :RedMusic ;
+  :songAuthor :HieuMinh .
+
+:TinhKhucVang a :Song ;
+  :songName "Tinh khuc vang" ;
+  :songGenre :Bolero ;
+  :songAuthor :HoaiAn .
+
+:ViEmConThuong a :Song ;
+  :songName "Vi em con thuong" ;
+  :songGenre :YellowMusic ;
+  :songAuthor :HungQuan .
+
+:ChuyenTinhLanVaDiep a :Song ;
+  :songName "Chuyen tinh Lan va Diep" ;
+  :songGenre :CaiLuong ;
+  :songAuthor :HaiLam .
+
+:HieuMinh a :Musician ;
+  :musicianName "Hieu Minh" .
+
+:HoaiAn a :Musician ;
+  :musicianName "Hoai An" .
+
+:HungQuan a :Musician ;
+  :musicianName "Hung Quan" .
+
+:HaiLam a :Musician ;
+  :musicianName "Hai Lam" .
+
+## Concert Duong di ve
+
+
+:concertDuongDiVe a :Concert ;
+  :concertDate "2022-06-15T20:00:00"^^xsd:dateTime ;
+  :concertLocation :SaiGon ;
+  :concertSingers :DamVinhHung, :DanNguyen .
+
+:SaiGon a :Location ;
+  :location "Sai Gon" .
+
+:DamVinhHung a :Singer ;
+  :singerName "Dam Vinh Hung" ;
+  :singerGenres :RedMusic, :Bolero ;
+  :singerSongs :LauDaiTinhAi, :SaoEmNoDanhQuen .
+
+:DanNguyen a :Singer ;
+  :singerName "Dan Nguyen" ;
+  :singerGenres :YellowMusic, :CaiLuong ;
+  :singerSongs :DoiSimTim, :DapMoCuocTinh .
+
+:LauDaiTinhAi a :Song ;
+  :songName "Lau dai tinh ai" ;
+  :songGenre :RedMusic ;
+  :songAuthor :HieuMinh .
+
+:SaoEmNoDanhQuen a :Song ;
+  :songName "Sao em no danh quen" ;
+  :songGenre :Bolero ;
+  :songAuthor :KhacViet .
+
+:DoiSimTim a :Song ;
+  :songName "Doi sim tim" ;
+  :songGenre :YellowMusic ;
+  :songAuthor :KhacViet .
+
+:DapMoCuocTinh a :Song ;
+  :songName "Dap mo cuoc tinh" ;
+  :songGenre :CaiLuong ;
+  :songAuthor :HaiLam .
+
+
+:KhacViet a :Musician ;
+  :musicianName "Khac Viet" .
+
 
 <http://example.org/schemas/test#veQueNgoai> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/schemas/test#Song> .
 <http://example.org/schemas/test#veQueNgoai> <http://example.org/schemas/test#songName> "Về quê ngoại okok" .
