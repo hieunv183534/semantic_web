@@ -16,12 +16,19 @@ WHERE {
 
 
 PREFIX : <http://example.org/schemas/test#>
+PREFIX  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+
 SELECT ?singerName ?songName ?musicianName
 WHERE {
-  ?singer a :Singer ;
+  ?singer rdf:type :Singer ;
           :singerName ?singerName ;
-          :singerSongs ?song .
+          :singerSongs ?song ;
+          :singerGenres ?genre .
+
   ?song :songName ?songName ;
         :songAuthor ?musician .
+
   ?musician :musicianName ?musicianName .
+
+  FILTER(contains(?singerName, "Lau")||contains(?songName, "Lau")||contains(?musicianName, "Lau"))
 }
