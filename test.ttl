@@ -129,22 +129,6 @@
     :songGenre :Bolero.
 
 
-<http://example.org/schemas/test#veQueNgoai> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/schemas/test#Song> .
-<http://example.org/schemas/test#veQueNgoai> <http://example.org/schemas/test#songName> "Về quê ngoại okok" .
-<http://example.org/schemas/test#veQueNgoai> <http://example.org/schemas/test#songGenre> <http://example.org/schemas/test#YellowMusic> .
-
-<http://example.org/schemas/test#veDauMaiTocNguoiThuong> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/schemas/test#Song> .
-<http://example.org/schemas/test#veDauMaiTocNguoiThuong> <http://example.org/schemas/test#songName> "Về đâu mái tóc người thương!!!" .
-<http://example.org/schemas/test#veDauMaiTocNguoiThuong> <http://example.org/schemas/test#songGenre> <http://example.org/schemas/test#Bolero> .
-
-<http://example.org/schemas/test#songA> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/schemas/test#Song> .
-<http://example.org/schemas/test#songA> <http://example.org/schemas/test#songName> "Song A" .
-<http://example.org/schemas/test#songA> <http://example.org/schemas/test#songGenre> <http://example.org/schemas/test#RedMusic> .
-
-<http://example.org/schemas/test#singerA> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/schemas/test#Singer> .
-<http://example.org/schemas/test#singerA> <http://example.org/schemas/test#singerName> "Singer A" .
-<http://example.org/schemas/test#singerA> <http://example.org/schemas/test#singerGenres> <http://example.org/schemas/test#RedMusic> .
-
 #location
 :haNoi a :Location;
     :location "Ha Noi" .
