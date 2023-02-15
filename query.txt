@@ -1,0 +1,14 @@
+## retrieve information about all concerts, along with the date and location of each concert and the singers who performed at each concert:
+
+PREFIX : <http://example.org/schemas/test#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?concert ?date ?location ?singer
+WHERE {
+  ?concert rdf:type :Concert ;
+           :concertDate ?date ;
+           :concertLocation ?loc .
+  ?loc :location ?location .
+  ?concert :concertSingers ?singer .
+}
